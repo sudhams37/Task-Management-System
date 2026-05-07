@@ -21,16 +21,21 @@ app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/projects', require('./routes/projectRoutes'));
 app.use('/api/tasks', require('./routes/taskRoutes'));
 
+const fs = require('fs');
+
 // Serve Frontend in Production
-if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, '../client/dist')));
+const distPath = path.join(__dirname, '../client/dist');
+const indexPath = path.resolve(__dirname, '../', 'client', 'dist', 'index.html');
+
+if (fs.existsSync(indexPath)) {
+    app.use(express.static(distPath));
     
     app.use((req, res) => {
-        res.sendFile(path.resolve(__dirname, '../', 'client', 'dist', 'index.html'));
+        res.sendFile(indexPath);
     });
 } else {
     app.get('/', (req, res) => {
-        res.send('Team Task Manager API is running...');
+        res.send('Team Task Manager API is running... (React frontend not built yet. Please run npm run build in Railway)');
     });
 }
 
