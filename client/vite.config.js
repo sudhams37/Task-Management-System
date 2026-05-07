@@ -3,7 +3,14 @@ import react from '@vitejs/plugin-react'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react({
+      jsxImportSource: 'react',
+      babel: {
+        plugins: ['react-refresh/babel'],
+      },
+    }),
+  ],
   server: {
     host: true,
     port: 5173,
