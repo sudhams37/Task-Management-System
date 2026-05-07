@@ -38,12 +38,15 @@ if (process.env.NODE_ENV === 'production') {
 const PORT = process.env.PORT || 5000;
 const MONGODB_URI = process.env.MONGODB_URI;
 
+// Start Server immediately for Railway Health Checks
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server running on port ${PORT}`);
+});
+
+// Connect to Database
 mongoose.connect(MONGODB_URI)
     .then(() => {
         console.log('MongoDB Connected Successfully');
-        app.listen(PORT, () => {
-            console.log(`Server running on port ${PORT}`);
-        });
     })
     .catch((err) => {
         console.error('MongoDB Connection Error:', err.message);
