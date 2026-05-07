@@ -21,9 +21,18 @@ app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/projects', require('./routes/projectRoutes'));
 app.use('/api/tasks', require('./routes/taskRoutes'));
 
-app.get('/', (req, res) => {
-    res.send('Team Task Manager API is running...');
-});
+// Serve Frontend in Production
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static(path.join(__dirname, '../client/dist')));
+    
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname, '../', 'client', 'dist', 'index.html'));
+    });
+} else {
+    app.get('/', (req, res) => {
+        res.send('Team Task Manager API is running...');
+    });
+}
 
 // Database Connection
 const PORT = process.env.PORT || 5000;
